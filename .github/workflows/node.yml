@@ -8,7 +8,7 @@ jobs:
   build:
     env:
       CI: true  #one way to disable watch mode. This is useful for CRApp which runs its test script in watch mode by default
-      MONGO_URL: mongodb://localhost:27017/nasa-api
+      MONGO_URL: mongodb://localhost/nasa-api
     strategy: #use to run our build process in different environments; here we have said we want to run in on Node 14.x & 16.x. We set our prooperties under matrix in strategy. This will create 2 builds jobs that each runs our build job
       matrix:
         node-version: [14.x, 16.x]
