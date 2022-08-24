@@ -1,0 +1,19 @@
+name: NASA Project CI #show on the GitHub wetsite
+on: #controls when this worklow would run (here we have said either when there is a push to master or there is a PR to master)
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps: #defines diff actions that would be taken on Ubuntu whenever our build job is triggerred by a Push or PR to d master branch. These actions are reusable scripts written by d GitHub team or other that helps automate the things we want to do in our job
+        - uses: actions/checkout@v2 #uses our latest code
+        - name: Use Node.js version 16
+          uses: actions/setup-node@v2
+          with:
+            node-version: '16'
+        - run: npm install  # we can also run command. Commands run on our OS terminal
+        - run: npm run build --prefix client  # runs create-react-app build script inside our client folder
+    #deploy:
+     # depends: build  #this way deploy job will run only after build has ran, ie sequentially
