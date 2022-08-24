@@ -8,17 +8,23 @@ jobs:
   build:
     env:
       CI: true  #one way to disable watch mode. This is useful for CRApp which runs its test script in watch mode by default
+      MONGO_URL: mongodb://localhost:27017/nasa-api
     strategy: #use to run our build process in different environments; here we have said we want to run in on Node 14.x & 16.x. We set our prooperties under matrix in strategy. This will create 2 builds jobs that each runs our build job
       matrix:
         node-version: [14.x, 16.x]
+        mongodb-version: ['4.4']
     runs-on: ubuntu-latest
     steps: #defines diff actions that would be taken on Ubuntu whenever our build job is triggerred by a Push or PR to d master branch. These actions are reusable scripts written by d GitHub team or other that helps automate the things we want to do in our job
       - uses: actions/checkout@v2 #used to fetch our project latest source  code
-      - name: Use Node.js version ${{matrix.node-version}}
+      - name: Use Node.js version ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           #node-version: '16'
-          node-version: ${{matrix.node-version}}
+          node-version: ${{ matrix.node-version }}
+      - name: Use MongoDB from GitHub Actions
+        uses: supercharge/mongodb-github-action@1.7.0 #starts a mongodb server specifically for the current job. DB is available on localhost inside d CI server
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
       - run: npm install  # we can also run command. Commands run on our OS terminal
       - run: npm run build --prefix client  # runs create-react-app build script inside our client folder
       - run: npm test 
